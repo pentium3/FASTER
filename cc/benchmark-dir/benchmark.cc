@@ -33,8 +33,8 @@ enum class Workload {
   RMW_100 = 1,
 };
 
-static constexpr uint64_t kInitCount = 250000000;
-static constexpr uint64_t kTxnCount = 1000000000;
+static constexpr uint64_t kInitCount = 400000;
+static constexpr uint64_t kTxnCount = 3200;
 static constexpr uint64_t kChunkSize = 3200;
 static constexpr uint64_t kRefreshInterval = 64;
 static constexpr uint64_t kCompletePendingInterval = 1600;
@@ -47,7 +47,7 @@ static_assert(kCompletePendingInterval % kRefreshInterval == 0,
 static constexpr uint64_t kNanosPerSecond = 1000000000;
 
 static constexpr uint64_t kMaxKey = 268435456;
-static constexpr uint64_t kRunSeconds = 30;
+static constexpr uint64_t kRunSeconds = 90;
 static constexpr uint64_t kCheckpointSeconds = 0;
 
 aligned_unique_ptr_t<uint64_t> init_keys_;
@@ -585,6 +585,8 @@ void run_benchmark(store_t* store, size_t num_threads) {
     thread.join();
   }
 
+//    printf("Finished threads %.2f reads, %.2f writes, in %.2f seconds.\n",
+//            (double)total_reads_done_, (double)total_writes_done_, ((double)total_duration_ / kNanosPerSecond) );
   printf("Finished benchmark: %" PRIu64 " thread checkpoints completed;  %.2f ops/second/thread\n",
          num_checkpoints.load(),
          ((double)total_reads_done_ + (double)total_writes_done_) / ((double)total_duration_ /
